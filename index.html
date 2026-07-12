@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fluxo de Caixa Pessoal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css"
+  <body>
+    <div class="fundo-atmosfera" aria-hidden="true"></div>
+
+    <div class="envoltorio">
+      <header class="cabecalho">
+        <div class="cabecalho__marca">
+          <span class="cabecalho__selo">Fluxo</span>
+          <h1 class="cabecalho__titulo">Caixa Pessoal</h1>
+        </div>
+        <p class="cabecalho__subtitulo">
+          Acompanhe receitas, despesas e o saldo da sua conta em um só lugar.
+        </p>
+      </header>
+
+      <section class="painel" aria-label="Visão geral financeira">
+        <article class="cartao cartao--entrada">
+          <p class="cartao__rotulo">Total de Entradas</p>
+          <p id="total-entradas" class="cartao__valor">R$ 0,00</p>
+        </article>
+
+        <article class="cartao cartao--saida">
+          <p class="cartao__rotulo">Total de Saídas</p>
+          <p id="total-saidas" class="cartao__valor">R$ 0,00</p>
+        </article>
+
+        <article id="cartao-saldo" class="cartao cartao--saldo cartao--saldo-positivo">
+          <p class="cartao__rotulo">Saldo Atual</p>
+          <p id="saldo-atual" class="cartao__valor">R$ 0,00</p>
+        </article>
+      </section>
+
+      <section class="indicador" aria-label="Proporção de gastos">
+        <div class="indicador__info">
+          <h2 class="indicador__titulo">Gastos sobre receitas</h2>
+          <p id="texto-proporcao" class="indicador__texto">
+            Sem movimentações ainda.
+          </p>
+        </div>
+
+        <div class="indicador__visual">
+          <div
+            id="grafico-rosca"
+            class="grafico-rosca"
+            role="img"
+            aria-label="Gráfico de proporção entre despesas e receitas"
+          >
+            <div class="grafico-rosca__centro">
+              <span id="porcentagem-gastos" class="grafico-rosca__valor">0%</span>
+              <span class="grafico-rosca__legenda">gastos</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="grade-principal">
+        <section class="bloco formulario-bloco" aria-labelledby="titulo-formulario">
+          <h2 id="titulo-formulario" class="bloco__titulo">Nova movimentação</h2>
+
+          <form id="formulario-transacao" class="formulario" novalidate>
+            <div class="campo">
+              <label for="descricao">Descrição</label>
+              <input
+                type="text"
+                id="descricao"
+                name="descricao"
+                placeholder="Ex: Salário, mercado, uber..."
+                required
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="campo">
+              <label for="valor">Valor</label>
+              <input
+                type="number"
+                id="valor"
+                name="valor"
+                min="0.01"
+                step="0.01"
+                placeholder="0,00"
+                required
+              />
+            </div>
+
+            <fieldset class="campo campo--tipo">
+              <legend>Tipo</legend>
+              <div class="opcoes-tipo">
+                <label class="opcao-tipo">
+                  <input type="radio" name="tipo" value="receita" checked />
+                  <span>Receita</span>
+                </label>
+                <label class="opcao-tipo">
+                  <input type="radio" name="tipo" value="despesa" />
+                  <span>Despesa</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="campo">
+              <label for="categoria">Categoria</label>
+              <select id="categoria" name="categoria" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="Salário">Salário</option>
+                <option value="Alimentação">Alimentação</option>
+                <option value="Transporte">Transporte</option>
+                <option value="Lazer">Lazer</option>
+                <option value="Saúde">Saúde</option>
+                <option value="Moradia">Moradia</option>
+                <option value="Educação">Educação</option>
+                <option value="Outros">Outros</option>
+              </select>
+            </div>
+
+            <button type="submit" class="botao botao--primario">
+              Adicionar transação
+            </button>
+          </form>
+        </section>
+
+        <section class="bloco historico-bloco" aria-labelledby="titulo-historico">
+          <div class="historico-cabecalho">
+            <h2 id="titulo-historico" class="bloco__titulo">Histórico</h2>
+
+            <div class="filtros">
+              <label class="campo-busca" for="campo-busca">
+                <span class="visually-hidden">Buscar por descrição</span>
+                <input
+                  type="search"
+                  id="campo-busca"
+                  placeholder="Buscar descrição..."
+                  autocomplete="off"
+                />
+              </label>
+
+              <div class="filtros-rapidos" role="group" aria-label="Filtros de tipo">
+                <button
+                  type="button"
+                  class="botao-filtro ativo"
+                  data-filtro="todas"
+                >
+                  Todas
+                </button>
+                <button
+                  type="button"
+                  class="botao-filtro"
+                  data-filtro="receitas"
+                >
+                  Receitas
+                </button>
+                <button
+                  type="button"
+                  class="botao-filtro"
+                  data-filtro="despesas"
+                >
+                  Despesas
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <ul id="lista-transacoes" class="lista-transacoes"></ul>
+
+          <p id="mensagem-vazia" class="mensagem-vazia">
+            Nenhuma transação encontrada.
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
